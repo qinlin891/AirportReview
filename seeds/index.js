@@ -16,7 +16,8 @@ const seedDB = async() => {
             const airport = new Airport({
                 name: `${list[i].airports[j]}`,
                 location: `${list[i].state}`,
-                description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur adipisci quisquam, cupiditate eos eligendi quaerat! Nobis quae suscipit in qui, modi reprehenderit id odio dolores cum ex mollitia quia rem'
+                description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur adipisci quisquam, cupiditate eos eligendi quaerat! Nobis quae suscipit in qui, modi reprehenderit id odio dolores cum ex mollitia quia rem',
+                image: 'https://source.unsplash.com/collection/508415'
             });
             await airport.save();
         }

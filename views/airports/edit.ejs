@@ -1,28 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Airport</title>
-</head>
-<body>
-    <h1>Edit Airport</h1>
-    <form action="/airports/<%=airport._id%>?_method=PUT" method="POST">
-        <div>
-            <label for="name">Name</label>
-            <input type="text" name="airport[name]" id="name" value="<%=airport.name%>">
+<% layout('layouts/boilerplate.ejs') %> 
+    <div class="row">
+        <h1 class="text-center">Edit Airport</h1>
+        <div class="col-6 offset-3">
+            <form action="/airports/<%=airport._id%>?_method=PUT" method="POST">
+                <div class="mb-3">
+                    <label class="form-label" for="name">Name</label>
+                    <input class="form-control" type="text" name="airport[name]" id="name" value="<%=airport.name%>">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" name="airport[location]" id="location" value="<%=airport.location%>">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="image">Image Url</label>
+                    <input class="form-control" type="text" name="airport[image]" id="image" value="<%=airport.image%>">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" name="airport[description]" id="description"><%=airport.description%></textarea>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-primary">Update Airport</button>
+                </div>
+            </form>
+            <a href="/airports/<%=airport._id%>">Back To Airport</a>
         </div>
-        <div>
-            <label for="location">Location</label>
-            <input type="text" name="airport[location]" id="location" value="<%=airport.location%>">
-        </div>
-        <div>
-            <label for="description">Description</label>
-            <input type="text" name="airport[description]" id="description" value="<%=airport.description%>">
-        </div>
-        <button>Update Campground</button>
-    </form>
-    <a href="/airports/<%=airport._id%>">Back To Airport</a>
-</body>
-</html>
+    </div>
