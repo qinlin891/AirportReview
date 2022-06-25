@@ -2,22 +2,22 @@
     <div class="row">
         <h1 class="text-center">Edit Airport</h1>
         <div class="col-6 offset-3">
-            <form action="/airports/<%=airport._id%>?_method=PUT" method="POST">
+            <form action="/airports/<%=airport._id%>?_method=PUT" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
                     <label class="form-label" for="name">Name</label>
-                    <input class="form-control" type="text" name="airport[name]" id="name" value="<%=airport.name%>">
+                    <input class="form-control" type="text" name="airport[name]" id="name" value="<%=airport.name%>" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
-                    <input class="form-control" type="text" name="airport[location]" id="location" value="<%=airport.location%>">
+                    <input class="form-control" type="text" name="airport[location]" id="location" value="<%=airport.location%>" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="image">Image Url</label>
-                    <input class="form-control" type="text" name="airport[image]" id="image" value="<%=airport.image%>">
+                    <input class="form-control" type="text" name="airport[image]" id="image" value="<%=airport.image%>" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" type="text" name="airport[description]" id="description"><%=airport.description%></textarea>
+                    <textarea class="form-control" type="text" name="airport[description]" id="description" required><%=airport.description%></textarea>
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-primary">Update Airport</button>
