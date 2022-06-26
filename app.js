@@ -7,7 +7,8 @@ const Airport = require('./models/airport');
 const methodOverride = require('method-override');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
-const {airportSchema} = require('./schemas');
+const {airportSchema, reviewSchema} = require('./schemas');
+const Review = require('./models/review')
 
 app.engine('ejs', engine);
 
@@ -27,6 +28,16 @@ db.once("open", ()=> {
 
 const validateAirport = (req, res, next) => {
     const {error} = airportSchema.validate(req.body);
+    if(error) {
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    } else {
+        next();
+    }
+}
+
+const validateReview = (req, res, next) => {
+    const {error} = reviewSchema.validate(req.body);
     if(error) {
         const msg = error.details.map(el => el.message).join(',');
         throw new ExpressError(msg, 400);
@@ -56,7 +67,7 @@ app.post('/airports', validateAirport, catchAsync(async(req, res) => {
 
 app.get('/airports/:id', catchAsync(async(req, res) => {
     const {id} = req.params;
-    const airport = await Airport.findById(id);
+    const airport = await Airport.findById(id).populate('reviews');
     res.render('airports/show', {airport});
 }));
 
@@ -77,9 +88,25 @@ app.delete('/airports/:id', catchAsync(async(req, res) => {
     res.redirect('/airports');
 }));
 
+app.post('/airports/:id/reviews',  validateReview, catchAsync(async(req, res) => {
+    const airport = await Airport.findById(req.params.id);
+    const review = new Review(req.body.review);
+    airport.reviews.push(review);
+    await review.save();
+    await airport.save();
+    res.redirect(`/airports/${airport._id}`);
+}));
+
+app.delete('/airports/:id/reviews/:reviewId', catchAsync(async(req, res) => {
+    const {id, reviewId} = req.params;
+    await Airport.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/airports/${id}`);
+}));
+
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));
-})
+});
 
 app.use((err, req, res, next) => {
     const {statusCode = 500} = err;
