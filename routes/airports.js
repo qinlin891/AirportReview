@@ -4,6 +4,7 @@ const Airport = require('../models/airport');
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const {airportSchema} = require('../schemas');
+const {isLoggedIn} = require('../middleware');
 
 const validateAirport = (req, res, next) => {
     const {error} = airportSchema.validate(req.body);
@@ -20,11 +21,11 @@ router.get('/', catchAsync(async(req, res) => {
     res.render('airports/index', {airports});
 }));
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('airports/new');
 });
 
-router.post('/', validateAirport, catchAsync(async(req, res) => {
+router.post('/', isLoggedIn, validateAirport, catchAsync(async(req, res) => {
     const airport = new Airport(req.body.airport);
     await airport.save();
     req.flash('success', 'Successfully made a new airport!');
@@ -41,7 +42,7 @@ router.get('/:id', catchAsync(async(req, res) => {
     res.render('airports/show', {airport});
 }));
 
-router.get('/:id/edit', catchAsync(async(req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async(req, res) => {
     const airport = await Airport.findById(req.params.id);
     if(!airport) {
         req.flash('error', 'Airport not found');
@@ -50,14 +51,14 @@ router.get('/:id/edit', catchAsync(async(req, res) => {
     res.render('airports/edit', {airport});
 }));
 
-router.put('/:id', validateAirport, catchAsync(async(req, res) => {
+router.put('/:id', isLoggedIn, validateAirport, catchAsync(async(req, res) => {
     const {id} = req.params;
     const airport = await Airport.findByIdAndUpdate(id, {...req.body.airport});
     req.flash('success', 'Successfully updated airport!');
     res.redirect(`/airports/${airport._id}`);
 }));
 
-router.delete('/:id', catchAsync(async(req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync(async(req, res) => {
     const {id} = req.params;
     await Airport.findByIdAndDelete(id);
     req.flash('success', 'Successfully deleted airport !');
