@@ -1,64 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const Airport = require('../models/airport');
+const airports = require('../controllers/airports');
 const catchAsync = require('../utils/catchAsync');
 const {isLoggedIn, isAuthor, validateAirport} = require('../middleware');
 
 
-router.get('/', catchAsync(async(req, res) => {
-    const airports = await Airport.find({});
-    res.render('airports/index', {airports});
-}));
+router.get('/', catchAsync(airports.index));
 
-router.get('/new', isLoggedIn, (req, res) => {
-    res.render('airports/new');
-});
+router.get('/new', isLoggedIn, airports.renderNewForm);
 
-router.post('/', isLoggedIn, validateAirport, catchAsync(async(req, res) => {
-    const airport = new Airport(req.body.airport);
-    airport.author = req.user._id;
-    await airport.save();
-    req.flash('success', 'Successfully made a new airport!');
-    res.redirect(`/airports/${airport._id}`);
-}));
+router.post('/', isLoggedIn, validateAirport, catchAsync(airports.createAirport));
 
-router.get('/:id', catchAsync(async(req, res) => {
-    const {id} = req.params;
-    const airport = await Airport.findById(id).populate({
-        path: 'reviews',
-        populate: {
-            path: 'author'
-        }
-    }).populate('author');
-    
-    if(!airport) {
-        req.flash('error', 'Airport not found');
-        return res.redirect('/airports');
-    }
-    res.render('airports/show', {airport});
-}));
+router.get('/:id', catchAsync(airports.showAirport));
 
-router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async(req, res) => {
-    const airport = await Airport.findById(req.params.id);
-    if(!airport) {
-        req.flash('error', 'Airport not found');
-        return res.redirect('/airports');
-    }
-    res.render('airports/edit', {airport});
-}));
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(airports.renderEditForm));
 
-router.put('/:id', isLoggedIn, isAuthor, validateAirport, catchAsync(async(req, res) => {
-    const {id} = req.params;
-    const airport = await Airport.findByIdAndUpdate(id, {...req.body.airport});
-    req.flash('success', 'Successfully updated airport!');
-    res.redirect(`/airports/${airport._id}`);
-}));
+router.put('/:id', isLoggedIn, isAuthor, validateAirport, catchAsync(airports.updateAirport));
 
-router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async(req, res) => {
-    const {id} = req.params;
-    await Airport.findByIdAndDelete(id);
-    req.flash('success', 'Successfully deleted airport !');
-    res.redirect('/airports');
-}));
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync(airports.deleteAirport));
 
 module.exports = router;
