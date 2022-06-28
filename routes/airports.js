@@ -5,19 +5,18 @@ const airports = require('../controllers/airports');
 const catchAsync = require('../utils/catchAsync');
 const {isLoggedIn, isAuthor, validateAirport} = require('../middleware');
 
-
-router.get('/', catchAsync(airports.index));
+router.route('/')
+    .get(catchAsync(airports.index))
+    .post(isLoggedIn, validateAirport, catchAsync(airports.createAirport));
 
 router.get('/new', isLoggedIn, airports.renderNewForm);
 
-router.post('/', isLoggedIn, validateAirport, catchAsync(airports.createAirport));
+router.route('/:id')
+    .get(catchAsync(airports.showAirport))
+    .put(isLoggedIn, isAuthor, validateAirport, catchAsync(airports.updateAirport))
+    .delete(isLoggedIn, isAuthor, catchAsync(airports.deleteAirport))
 
-router.get('/:id', catchAsync(airports.showAirport));
 
 router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(airports.renderEditForm));
-
-router.put('/:id', isLoggedIn, isAuthor, validateAirport, catchAsync(airports.updateAirport));
-
-router.delete('/:id', isLoggedIn, isAuthor, catchAsync(airports.deleteAirport));
 
 module.exports = router;
