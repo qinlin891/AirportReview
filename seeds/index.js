@@ -14,6 +14,7 @@ const seedDB = async() => {
     for(let i = 0; i < list.length; i++) {
         for(let j = 0; j < list[i].airports.length; j++) {
             const airport = new Airport({
+                author: '62b9f5660e29cb8744cbe879',
                 name: `${list[i].airports[j]}`,
                 location: `${list[i].state}`,
                 description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur adipisci quisquam, cupiditate eos eligendi quaerat! Nobis quae suscipit in qui, modi reprehenderit id odio dolores cum ex mollitia quia rem',
