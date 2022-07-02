@@ -1,4 +1,5 @@
 const Airport = require('../models/airport');
+const {cloudinary} = require('../cloudinary');
 
 module.exports.index = async(req, res) => {
     const airports = await Airport.find({});
@@ -11,8 +12,10 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createAirport = async(req, res) => {
     const airport = new Airport(req.body.airport);
+    airport.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
     airport.author = req.user._id;
     await airport.save();
+    console.log(airport);
     req.flash('success', 'Successfully made a new airport!');
     res.redirect(`/airports/${airport._id}`);
 };
@@ -45,6 +48,15 @@ module.exports.renderEditForm = async(req, res) => {
 module.exports.updateAirport = async(req, res) => {
     const {id} = req.params;
     const airport = await Airport.findByIdAndUpdate(id, {...req.body.airport});
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    airport.images.push(...imgs);
+    await airport.save();
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await airport.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
+    }
     req.flash('success', 'Successfully updated airport!');
     res.redirect(`/airports/${airport._id}`);
 };

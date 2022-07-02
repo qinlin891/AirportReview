@@ -18,7 +18,16 @@ const seedDB = async() => {
                 name: `${list[i].airports[j]}`,
                 location: `${list[i].state}`,
                 description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur adipisci quisquam, cupiditate eos eligendi quaerat! Nobis quae suscipit in qui, modi reprehenderit id odio dolores cum ex mollitia quia rem',
-                image: 'https://source.unsplash.com/collection/508415'
+                images: [
+                    {
+                      url: 'https://res.cloudinary.com/downnbcia/image/upload/v1656525399/AirportReview/l5qhikykx14qkt2mno2j.jpg',
+                      filename: 'AirportReview/l5qhikykx14qkt2mno2j'
+                    },
+                    {
+                      url: 'https://res.cloudinary.com/downnbcia/image/upload/v1656525399/AirportReview/tutjr8jjcnjhlw74z94r.jpg',
+                      filename: 'AirportReview/tutjr8jjcnjhlw74z94r'
+                    }
+                  ]
             });
             await airport.save();
         }

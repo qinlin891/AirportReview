@@ -2,7 +2,7 @@
     <div class="row">
         <h1 class="text-center">Edit Airport</h1>
         <div class="col-6 offset-3">
-            <form action="/airports/<%=airport._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+            <form action="/airports/<%=airport._id%>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label" for="name">Name</label>
                     <input class="form-control" type="text" name="airport[name]" id="name" value="<%=airport.name%>" required>
@@ -12,12 +12,21 @@
                     <input class="form-control" type="text" name="airport[location]" id="location" value="<%=airport.location%>" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="image">Image Url</label>
-                    <input class="form-control" type="text" name="airport[image]" id="image" value="<%=airport.image%>" required>
+                    <label for="image" class="form-label">Add image(s)...</label>
+                    <input class="form-control" type="file" id="image" name="image" multiple>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
                     <textarea class="form-control" type="text" name="airport[description]" id="description" required><%=airport.description%></textarea>
+                </div>
+                <div class="mb-3">
+                    <% airport.images.forEach(function(img, i) { %> 
+                        <img src="<%=img.thumbnail%>" alt="" class="img-thumbnail">
+                        <div class="form-check-inline">
+                            <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+                        </div>
+                        <label for="image-<%=i%>">Delete?</label>
+                    <% }) %> 
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-primary">Update Airport</button>
