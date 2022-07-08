@@ -7,7 +7,14 @@ const map = new mapboxgl.Map({
 });
 
 // Create a new marker.
-new mapboxgl.Marker()
+const el = document.createElement('div');
+const width = 30;
+const height = 30;
+el.style.backgroundImage = `url(/images/airport.svg)`;
+el.style.width = `${width}px`;
+el.style.height = `${height}px`;
+el.style.backgroundSize = '100%';
+new mapboxgl.Marker(el)
     .setLngLat(airport.geometry.coordinates)
     .setPopup(
         new mapboxgl.Popup({ offset: 25 })
