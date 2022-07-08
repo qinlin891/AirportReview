@@ -17,6 +17,7 @@ const seedDB = async() => {
                 author: '62b9f5660e29cb8744cbe879',
                 name: `${list[i].airports[j]}`,
                 location: `${list[i].state}`,
+                geometry: { type: 'Point', coordinates: [ -98.495141, 29.4246 ] },
                 description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur adipisci quisquam, cupiditate eos eligendi quaerat! Nobis quae suscipit in qui, modi reprehenderit id odio dolores cum ex mollitia quia rem',
                 images: [
                     {

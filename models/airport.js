@@ -14,6 +14,17 @@ ImageSchema.virtual('thumbnail').get(function () {
 const AirportSchema = new Schema({
     name: String,
     location: String,
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
     description: String,
     images: [ImageSchema],
     author: {

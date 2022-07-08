@@ -1,13 +1,25 @@
 <% layout('layouts/boilerplate.ejs') %> 
-    <h1>All Airports</h1>
-    <div>
-        <a href="/airports/new">Add Airport</a>
+<h1>All Airports</h1>
+<div>
+    <a href="/airports/new">Add Airport</a>
+</div>
+
+<!-- <div class="row">
+    <div class="col-md-6 offset-3 my-3">
+        <input class="form-control border border-dark" type="search" name="search" id="search" placeholder="Search Airport">
     </div>
+</div> -->
+
 <% for (let airport of airports) { %> 
     <div class="card mb-3">
         <div class="row">
             <div class="col-md-4">
-                <img class="img-fluid" src="<%= airport.images[0].url%>" alt="">
+                <%if(airport.images.length) {%>
+                    <img class="img-fluid" alt="" src="<%=airport.images[0].url%>">
+                    <% }else {%>
+                    <img class="img-fluid" alt=""
+                        src="https://res.cloudinary.com/downnbcia/image/upload/v1656525399/AirportReview/l5qhikykx14qkt2mno2j.jpg">
+                    <% } %>
             </div>
             <div class="col-md-8">
                 <div class="card-body">
