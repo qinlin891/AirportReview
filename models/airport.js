@@ -11,6 +11,8 @@ ImageSchema.virtual('thumbnail').get(function () {
     return this.url.replace('/upload', '/upload/w_200');
 });
 
+const opts = { toJSON: { virtuals: true } };
+
 const AirportSchema = new Schema({
     name: String,
     location: String,
@@ -37,6 +39,12 @@ const AirportSchema = new Schema({
             ref: 'Review'
         }
     ]
+}, opts);
+
+AirportSchema.virtual('properties.popUpMarkup').get(function () {
+    return `
+    <strong><a href="/airports/${this._id}">${this.name}</a><strong>
+    <p>${this.description.substring(0, 20)}...</p>`
 });
 
 AirportSchema.post('findOneAndDelete', async function(doc) {
@@ -48,5 +56,6 @@ AirportSchema.post('findOneAndDelete', async function(doc) {
         })
     }
 });
+
 
 module.exports = mongoose.model('Airport', AirportSchema);
